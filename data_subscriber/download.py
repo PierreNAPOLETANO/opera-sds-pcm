@@ -65,14 +65,16 @@ def run_download(args, token, es_conn, netloc, username, password, job_id):
     # simply find entries for that one granule
     if args.batch_ids and len(args.batch_ids) == 1:
         one_granule = args.batch_ids[0]
-        logging.info(f"Downloading files for the granule {one_granule}")
+        logging.info(f"Length of batch-ids is 1. Downloading files for the granule {one_granule} from {provider}")
 
         if provider == "ASF":
+            # For SLC when --native-id option is used in query the batch-id coming into download is the id, the zip file name
             result = es_conn.es.query(index='slc_catalog',
-                     body={"query": {"bool": {"must": [{"match": {"granule_id" : one_granule}}]}}})
+                     body={"query": {"bool": {"must": [{"match": {"id": one_granule}}]}}})
         else:
+            # For HLS when --native-id option is used in query the batch-id coming into download is the granule_id
             result = es_conn.es.query(index='hls_catalog',
-                     body={"query": {"bool": {"must": [{"match": {"granule_id" : one_granule}}]}}})
+                     body={"query": {"bool": {"must": [{"match": {"granule_id": one_granule}}]}}})
 
         downloads =  [{"s3_url": catalog_entry["_source"].get("s3_url"), "https_url": catalog_entry["_source"].get("https_url")}
                 for catalog_entry in (result or [])]
