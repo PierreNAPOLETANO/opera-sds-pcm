@@ -21,7 +21,7 @@ See `*audit.py --help`, documentation comments, and source code for more details
 1. Create a python virtual environment.
     1. RECOMMENDED: move `pip.conf` into the resulting `venv/` directory.
 2. Activate the virtual environment and install the script dependencies referenced in the imports section as needed.
-    1. RECOMMENDED: install dependencies listed in the relevant section of `setup.py` using the following command `pip install '.[audit]' && pip uninstall $(python setup.py --name) --yes'`
+    1. RECOMMENDED: install dependencies listed in the relevant section of `setup.py` using the following command `pip install '.[audit]'`
 
 ### Running locally 
 
@@ -103,7 +103,7 @@ See `cmr_audit*.py --help`, documentation comments, and source code for more det
 1. Create a python virtual environment.
     1. RECOMMENDED: move `pip.conf` into the resulting `venv/` directory.
 2. Activate the virtual environment and install the script dependencies referenced in the imports section as needed.
-    1. RECOMMENDED: install dependencies listed in the relevant section of `setup.py` using the following command `pip install '.[cmr_audit]' && pip uninstall $(python setup.py --name) --yes'`
+    1. RECOMMENDED: install dependencies listed in the relevant section of `setup.py` using the following command `pip install '.[cmr_audit]'`
 
 ### Running locally
 
@@ -127,22 +127,33 @@ $ python cmr_audit_hls.py --start-datetime 2023-06-01T00:00:00 --end-datetime 20
 $ python cmr_audit_hls.py --start-datetime 2023-06-01T00:00:00 --end-datetime 2023-06-02T00:00:00  --output missing_granule.json --format json
 ```
 
-
 # CNM Check tool
 
-TBD
+The CNM check tool outputs the CNM statuses for a given JSON list of HLS granules.
 
+## Getting Started
+
+### Prerequisites
+
+1. Git.
+1. Python (see `.python-version`).
+1. A clone of the `opera-sds-pcm` repo.
 
 ### Installation on local system
-...
+
+1. Create a python virtual environment.
+    1. RECOMMENDED: move `pip.conf` into the resulting `venv/` directory.
+2. Activate the virtual environment and install the script dependencies referenced in the imports section as needed.
+    1. RECOMMENDED: install dependencies listed in the relevant section of `setup.py` using the following command `pip install '.[cnm_check]'`
 
 ### Running locally
-...
+
+1. Run `python cnm_check.py <input_file>` from the same directory.
 
 
 ### Installation on Mozart
-1. `pip install compact_json`
 
+Not required
 
 ### Running on Mozart
 1. Configure `~/mozart/ops/opera-pcm/tools/.env` as needed
