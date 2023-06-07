@@ -50,7 +50,7 @@ def create_parser():
     )
     argparser.add_argument(
         "--output", "-o",
-        help=f'ISO formatted datetime string. Must be compatible with CMR.'
+        help=f'Output filename.'
     )
     argparser.add_argument(
         "--format",
