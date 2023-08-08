@@ -9,7 +9,7 @@ USER ops
 COPY . /home/ops/verdi/ops/opera-pcm
 RUN set -ex \
  && source /home/ops/.bash_profile \
- && sudo /opt/conda/bin/conda install -y conda gdal==3.7.2 cffi \
+ && sudo /opt/conda/bin/conda install -y conda gdal==3.37.1 cffi \
  # TODO: remove the following kludge once this issue has been resolved:
  # https://stackoverflow.com/questions/71904252/gdalinfo-error-while-loading-shared-libraries-libtiledb-so-2-2-cannot-open-sh
  && sudo ln -sf /opt/conda/lib/libtiledb.so /opt/conda/lib/libtiledb.so.2.2 \
