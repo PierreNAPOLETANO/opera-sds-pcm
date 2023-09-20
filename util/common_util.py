@@ -14,9 +14,7 @@ def convert_datetime(datetime_obj, strformat="%Y-%m-%dT%H:%M:%S.%fZ"):
     """
     Converts from a datetime string to a datetime object or vice versa
     """
-    if isinstance(datetime_obj, datetime.datetime):
-        return datetime_obj.strftime(strformat)
-    return datetime.datetime.strptime(str(datetime_obj), strformat)
+    return datetime_obj.strftime(strformat) if isinstance(datetime_obj, datetime.datetime) else datetime.datetime.strptime(str(datetime_obj), strformat)
 
 
 def to_datetime(input_object, strformat="%Y-%m-%dT%H:%M:%S.%fZ"):
@@ -33,12 +31,7 @@ def to_datetime(input_object, strformat="%Y-%m-%dT%H:%M:%S.%fZ"):
 
 
 def get_product_metadata(product_metadata):
-    if "metadata" in product_metadata:
-        metadata = product_metadata.get("metadata")
-    else:
-        metadata = product_metadata
-
-    return metadata
+    return product_metadata.get("metadata") if "metadata" in product_metadata else product_metadata
 
 
 def get_working_dir(work_unit_filename="workunit.json"):
@@ -48,26 +41,23 @@ def get_working_dir(work_unit_filename="workunit.json"):
     with open(work_unit_file) as f:
         work_unit = json.load(f)
 
-    working_dir = os.path.dirname(work_unit['args'][0])
-
-    return working_dir
+    return os.path.dirname(work_unit['args'][0])
 
 
 def lower_keys(x):
     if isinstance(x, list):
         return [lower_keys(v) for v in x]
     elif isinstance(x, dict):
-        return dict((k.lower(), lower_keys(v)) for k, v in x.items())
+        return {k.lower(): lower_keys(v) for k, v in x.items()}
     else:
         return x
 
 
 def get_latest_product_sort_list():
-    sort_list = [
+    return [
         "metadata.{}.keyword:desc".format(pm.COMPOSITE_RELEASE_ID),
         "metadata.{}:desc".format(pm.PRODUCT_COUNTER)
     ]
-    return sort_list
 
 
 def get_data_date_times(records, begin_time_key, end_time_key):
@@ -112,7 +102,7 @@ def get_data_date_times(records, begin_time_key, end_time_key):
 
 def get_source_includes():
     # Default source_includes so we don't return everything from a query
-    source_includes = [
+    return [
         "id",
         "_id",
         "urls",
@@ -121,7 +111,6 @@ def get_source_includes():
         "starttime",
         "endtime"
     ]
-    return source_includes
 
 
 def fix_timestamp(ts):
@@ -129,11 +118,7 @@ def fix_timestamp(ts):
        python3 (microsecond - 6 digits) and ElasticSearch 7.1 (microsecond)
        and return. Otherwise, the input value is passed through."""
 
-    if match := INCOMPATIBLE_TIMESTAMP_RE.search(ts):
-        return "{}{}".format(*match.groups())
-    else:
-        return ts
-
+    return "{}{}".format(*match.groups()) if match := INCOMPATIBLE_TIMESTAMP_RE.search(ts) else ts
 
 def create_expiration_time(latency):
     """
@@ -142,7 +127,10 @@ def create_expiration_time(latency):
     :param latency:
     :return: a datetime string in ISO 8601 format.
     """
-    return convert_datetime(datetime.datetime.utcnow() + datetime.timedelta(minutes=latency))
+    return convert_datetime(
+        datetime.datetime.now(datetime.timezone.utc)
+        + datetime.timedelta(minutes=latency)
+    )
 
 
 def create_state_config_dataset(dataset_name, metadata, start_time, end_time=None, geojson=None,
